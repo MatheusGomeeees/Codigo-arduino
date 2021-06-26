@@ -1,0 +1,39 @@
+#include<LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 13, 7, 6, 5, 4);
+int sensor = 0;
+int celsius = 0;
+unsigned long time;
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(11, OUTPUT);
+  Serial.begin(9600);
+  lcd.begin(16,2);
+  lcd.print("Temperatura");
+}
+
+void loop()
+{
+  sensor = analogRead(A0);
+  celsius = map(((analogRead(A0) - 20) * 3.04), 0, 1023, -40, 125);
+  
+  lcd.setCursor(0,1);
+  lcd.print(celsius);
+  lcd.write(B10110010);
+  lcd.print("C");  
+  Serial.print(" ");
+  Serial.print(celsius);
+  Serial.println("  ");
+  Serial.println("    ");
+  Serial.print(" "); time = millis();
+  Serial.println(time);
+  delay(1000);
+  
+  if(celsius <75) {
+    digitalWrite(11, HIGH);
+  }
+  if(celsius>75) {
+    digitalWrite(11, LOW);
+  }
+}
